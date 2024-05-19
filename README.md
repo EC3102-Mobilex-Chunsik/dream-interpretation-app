@@ -1,5 +1,5 @@
 # MobileX Experience Lab
-![a](Computer systems Design Lab/2.jpg)
+![2](Computer systems Design Lab/2.jpg)
 
 ![3](./Computer systems Design Lab/3.jpg)
 
