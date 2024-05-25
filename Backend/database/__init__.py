@@ -1,6 +1,6 @@
 from . import (
     connection,
-    crud,
     models,
+    queries,
     schemas,
 )

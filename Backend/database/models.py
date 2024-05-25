@@ -1,6 +1,6 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Text, DateTime
 from sqlalchemy.orm import relationship
-from Backend.database.connection import Base
+from database.connection import Base
 
 
 class Dream(Base):

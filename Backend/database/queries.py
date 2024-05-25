@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-import models
-import schemas
+import database.models as models
+import database.schemas as schemas
 
 
 # Dream 관련 함수들
