@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 import openai
 
 # OpenAI API 키 설정 (환경 변수로 설정하는 것이 더 안전합니다)
-openai.api_key = 'sk-proj-gMh1WuH1iq5njhEcDH8BT3BlbkFJFp3choeFDlUTNkQbCSl4'
+openai.api_key = 'api_key'
 
 class FactorModel(BaseModel):
     tagName: str
