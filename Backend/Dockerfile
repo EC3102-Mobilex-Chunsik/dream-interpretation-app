@@ -28,6 +28,9 @@ RUN --mount=type=cache,target=${POETRY_CACHE_DIR} \
 # --- runtime ----
 FROM "docker.io/library/python:${PYTHON_VERSION}-slim-${PYTHON_DIST}" as runtime
 
+# Install PostgreSQL client
+RUN apt-get update && apt-get install -y postgresql-client
+
 # Configure entrypoint
 ENTRYPOINT ["/usr/bin/env"]
 CMD [ "fastapi", "run", "main.py" ]

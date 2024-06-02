@@ -32,6 +32,9 @@ langchainhub = { version = "*" }
 neo4j = { version = "*" }
 python = ">=3.12,<3.13"
 python-dotenv = { version = "*" }
+psycopg2-binary = "*"
+sqlalchemy = "*"
+openai = "*"
 
 
 [build-system]
