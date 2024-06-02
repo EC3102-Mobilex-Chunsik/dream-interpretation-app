@@ -22,6 +22,7 @@ if not openai.api_key:
 else:
     logger.info(f"OPENAI_API_KEY 설정됨: {openai.api_key}")
 
+
 class InputModel(BaseModel):
     dream_description: str = Field(
         description='사용자가 묘사하는 꿈의 내용',
@@ -32,10 +33,12 @@ class InputModel(BaseModel):
         default='chatgpt',
     )
 
+
 class OutputModel(BaseModel):
     interpretation: str = Field(
         description='꿈 해석',
     )
+
 
 def interpret_dream(input_data: InputModel) -> OutputModel:
     if input_data.llm_type == 'chatgpt':
@@ -49,16 +52,19 @@ def interpret_dream(input_data: InputModel) -> OutputModel:
                     {"role": "user", "content": f"다음 꿈을 해석해줘: {input_data.dream_description}"}
                 ]
             )
-            interpretation = response['choices'][0]['message']['content'].strip()
+            interpretation = response['choices'][0]['message']['content'].strip(
+            )
             logger.info(f"꿈 해석 결과: {interpretation}")
         except Exception as e:
             logger.error(f"OpenAI API 호출 중 오류 발생: {e}")
             raise HTTPException(status_code=500, detail=str(e))
     else:
         logger.error(f"지원하지 않는 LLM 타입: {input_data.llm_type}")
-        raise HTTPException(status_code=400, detail=f"지원하지 않는 LLM 타입: {input_data.llm_type}")
+        raise HTTPException(
+            status_code=400, detail=f"지원하지 않는 LLM 타입: {input_data.llm_type}")
 
     return OutputModel(interpretation=interpretation)
+
 
 # 새로운 꿈 해석 엔드포인트
 @router.post("/interpret", response_model=OutputModel)

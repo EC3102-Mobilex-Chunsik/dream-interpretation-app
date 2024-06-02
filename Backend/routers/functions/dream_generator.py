@@ -21,6 +21,8 @@ store = LLMStore()
 ###############################################
 
 # Dream List
+
+
 @router.get('/dreams', response_model=List[DreamDetailModel])
 async def get_all_dreams() -> List[DreamDetailModel]:
     # Retrieve all dream records from the database
@@ -28,6 +30,8 @@ async def get_all_dreams() -> List[DreamDetailModel]:
     return dreams
 
 # Dream Detail by ID
+
+
 @router.get('/dreams/{id}', response_model=DreamDetailModel)
 async def get_dream_by_id(id: int) -> DreamDetailModel:
     # Retrieve specific dream by ID from the database
@@ -35,6 +39,8 @@ async def get_dream_by_id(id: int) -> DreamDetailModel:
     return dream
 
 # Dream Generation
+
+
 @router.post(f'/func/{NAME}', response_model=OutputModel)
 async def call_dream_generator(model: InputModel) -> OutputModel:
     # Create a LLM chain

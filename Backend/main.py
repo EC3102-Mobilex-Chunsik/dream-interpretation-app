@@ -2,12 +2,7 @@ import os
 import dotenv
 from fastapi import FastAPI
 
-import routers.health
-import routers.home
-import routers.dreams
-
-import database
-
+import routers
 
 # Load environment variables from dotenv file
 dotenv.load_dotenv()
@@ -17,11 +12,7 @@ app = FastAPI(
 )
 
 # Register all available routers
-# app.include_router(routers.functions.acrostic_generator.router)
-# app.include_router(routers.functions.anime_characterize.router)
-# app.include_router(routers.functions.interview_simulator.router)
-# app.include_router(routers.functions.kospi_analyzer.router)
 app.include_router(routers.health.router)
 app.include_router(routers.home.router)
 app.include_router(routers.dreams.router)
-# app.include_router(routers.functions.dream.router)
+app.include_router(routers.dream_interpret.router)

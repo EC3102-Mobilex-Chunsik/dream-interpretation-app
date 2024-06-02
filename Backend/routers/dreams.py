@@ -22,7 +22,7 @@ def get_db():
         db.close()
 
 
-# Dream 관련 엔드포인트
+# Dream database 관련 엔드포인트
 @router.post("/dreams", response_model=schemas.Dream)
 def create_dream(dream: schemas.DreamCreate, db: Session = Depends(get_db)):
     return queries.create_dream(db=db, dream=dream)

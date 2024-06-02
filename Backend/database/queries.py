@@ -3,9 +3,6 @@ import database.models as models
 import database.schemas as schemas
 
 
-# Dream 관련 함수들
-
-
 def get_dream(db: Session, dream_id: int):
     return db.query(models.Dream).filter(models.Dream.id == dream_id).first()
 
