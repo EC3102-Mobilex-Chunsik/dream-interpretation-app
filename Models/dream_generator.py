@@ -5,19 +5,23 @@ import openai
 # OpenAI API 키 설정 (환경 변수로 설정하는 것이 더 안전합니다)
 openai.api_key = 'api_key'
 
+
 class FactorModel(BaseModel):
     tagName: str
     description: str
 
+
 class InputModel(BaseModel):
     text: str
     llm_type: str
+
 
 class OutputModel(BaseModel):
     title: str
     context: str
     factors: List[FactorModel]
     images: List[str]
+
 
 class DreamDetailModel(BaseModel):
     id: int
@@ -27,7 +31,8 @@ class DreamDetailModel(BaseModel):
     context: str
     factors: List[FactorModel]
     images: List[str]
-    
+
+
 class InputModel(BaseModel):
     dream_description: str = Field(
         description='사용자가 묘사하는 꿈의 내용',
@@ -40,10 +45,12 @@ class InputModel(BaseModel):
         default='chatgpt',
     )
 
+
 class OutputModel(BaseModel):
     interpretation: str = Field(
         description='꿈 해석',
     )
+
 
 def interpret_dream(input_data: InputModel) -> OutputModel:
     if input_data.llm_type == 'chatgpt':
@@ -61,6 +68,7 @@ def interpret_dream(input_data: InputModel) -> OutputModel:
 
     return OutputModel(interpretation=interpretation)
 
+
 def main():
     # 예제 사용자 입력
     user_input = {
@@ -70,8 +78,9 @@ def main():
 
     input_data = InputModel(**user_input)
     output_data = interpret_dream(input_data)
-    
+
     print("꿈 해석 결과:", output_data.interpretation)
+
 
 if __name__ == "__main__":
     main()
