@@ -3,12 +3,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ $.Release.Name }}-{{ $component_type }}
+  name: {{ $component_type }}
+  {{/* {{ $.Release.Name }}-{{ $component_type }} */}}
   labels:
     {{- include "common_labels" (list $ $component_type) | nindent 4 }}
 spec:
   replicas: {{ .replicas }}
-  strategy: {{ .strategy }}
+  strategy: 
+    type: {{ .strategy }}
   selector:
     matchLabels:
       {{- include "common_labels" (list $ $component_type) | nindent 6 }}
@@ -39,7 +41,7 @@ spec:
                 secretKeyRef:
                   name: {{ $.Release.Name }}-{{ $component_type }}
                   key: dbname
-            - name: MYSQL_USER
+{{/*        - name: MYSQL_USER
               valueFrom:
                 secretKeyRef:
                   name: {{ $.Release.Name }}-{{ $component_type }}
@@ -55,12 +57,13 @@ spec:
                   name: {{ $.Release.Name }}-{{ $component_type }}
                   key: dbname
             - name: MYSQL_RANDOM_ROOT_PASSWORD
-              value: "yes"
+              value: "yes"   */}} 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ $.Release.Name }}-{{ $component_type }}
+  name: {{ $component_type }}
+  {{/* {{ $.Release.Name }}-{{ $component_type }} */}}
   labels:
     {{- include "common_labels" (list $ $component_type) | nindent 4 }}
 spec:

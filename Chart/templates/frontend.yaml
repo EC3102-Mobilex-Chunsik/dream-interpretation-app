@@ -1,14 +1,17 @@
-{{- $component_type := "frontend" }}
+{{- $component_type := "frontend" }}  
+{{- if .Values.frontend.enabled }}  {{/* frontend.enabled 값이 true일 때만 리소스를 생성 */}} 
 {{- with (get .Values $component_type) -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ $.Release.Name }}-{{ $component_type }}
+  name: {{ $component_type }}
+  {{/* {{ $.Release.Name }}-{{ $component_type }} */}}
   labels:
     {{- include "common_labels" (list $ $component_type) | nindent 4 }}
 spec:
   replicas: {{ .replicas }}
-  strategy: {{ .strategy }}
+  strategy: 
+    type: {{ .strategy }}
   selector:
     matchLabels:
       {{- include "common_labels" (list $ $component_type) | nindent 6 }}
@@ -21,12 +24,13 @@ spec:
         - name: {{ $component_type }}
           image: {{ .image }}
           imagePullPolicy: Always
-          command:
-            - "streamlit"
-            - "run"
-            - "main.py"
+          command: ["sh", "-c"] 
+          args:
+            - |
+              yarn install && yarn dev --host
+            {{/* yarn install && yarn start */}}
           env:
-            - name: STREAMLIT_SERVER_PORT
+            - name: REACT_SERVER_PORT
               value: "{{ .port }}"
           ports:
             - containerPort: {{ .port }}
@@ -34,7 +38,8 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ $.Release.Name }}-{{ $component_type }}
+  name: {{ $component_type }}
+  {{/* {{ $.Release.Name }}-{{ $component_type }} */}}
   labels:
     {{- include "common_labels" (list $ $component_type) | nindent 4 }}
 spec:
@@ -44,7 +49,8 @@ spec:
   ports:
     - protocol: TCP
       port: {{ .port }}
-      targetPort: {{ .port }}
+      targetPort: {{ .port }} 
       name: http
 ---
+{{- end -}}
 {{- end -}}

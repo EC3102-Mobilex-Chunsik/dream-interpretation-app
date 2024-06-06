@@ -3,12 +3,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ $.Release.Name }}-{{ $component_type }}
+  name: {{ $component_type }}
+  {{/* {{ $.Release.Name }}-{{ $component_type }} */}}
   labels:
     {{- include "common_labels" (list $ $component_type) | nindent 4 }}
 spec:
   replicas: {{ .replicas }}
-  strategy: {{ .strategy }}
+  strategy:
+    type: {{ .strategy }}
   selector:
     matchLabels:
       {{- include "common_labels" (list $ $component_type) | nindent 6 }}
@@ -21,39 +23,51 @@ spec:
         - name: {{ $component_type }}
           image: {{ .image }}
           imagePullPolicy: Always
-          command:
+{{/*      command:
             - "gunicorn"
             - "-w=8"
             - "-b=0.0.0.0:{{ .port }}"
             - "--access-logfile=-"
-            - "main:app"
+            - "main:app"  */}}
           env:
-            - name: DATABASE_USERNAME
+            # base url
+            - name: BASE_URL
+              value: /api/v1
+            # for OpenAI API
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: openai
+                  key: OPENAI_API_KEY
+            # for database
+            - name: DB_USER # DATABASE_USERNAME
               valueFrom:
                 secretKeyRef:
                   name: {{ $.Release.Name }}-database
                   key: username
-            - name: DATABASE_PASSWORD
+            - name: DB_PASSWORD # DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ $.Release.Name }}-database
                   key: password
-            - name: DATABASE_DBNAME
+            - name: DB_NAME # DATABASE_DBNAME
               valueFrom:
                 secretKeyRef:
                   name: {{ $.Release.Name }}-database
                   key: dbname
-            - name: DATABASE_HOST
-              value: {{ $.Release.Name }}-database
-            - name: DATABASE_PORT
-              value: {{ $.Values.database.port }}
+            - name: DB_HOST # DATABASE_HOST
+              value: database
+              {{/* {{ $.Release.Name }}-database */}}
+            - name: DB_PORT # DATABASE_PORT
+              value: "{{ $.Values.database.port }}"
           ports:
             - containerPort: {{ .port }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ $.Release.Name }}-{{ $component_type }}
+  name: {{ $component_type }}
+  {{/* {{ $.Release.Name }}-{{ $component_type }} */}}
   labels:
     {{- include "common_labels" (list $ $component_type) | nindent 4 }}
 spec:
